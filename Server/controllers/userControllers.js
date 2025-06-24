@@ -140,6 +140,7 @@ const changeUserAvatar = async (req, res, next) => {
     if(avatar.size > 5000000){
       return next(new HttpError("Profile Picture too big, Should be less than 500kb"))
     }
+    //Generate Unique File Name
     let fileName = avatar.name;
     let splittedFilename = fileName.split(".")
     let newFilename = splittedFilename[0] + uuid() + "." + splittedFilename[splittedFilename.length - 1]
@@ -170,6 +171,7 @@ const followUnfollowUser = async (req, res, next) => {
     if (req.user.id == userToFollowId) {
       return next(new HttpError("You can't follow/unfollow yourself", 422));
     }
+    //Now we get data of current user from mongoose
     const currentUser = await userModel.findById(req.user.id);
     const isFollowing = currentUser?.following?.includes(userToFollowId);
     //follow if not following,else unfollow if already following
@@ -179,6 +181,7 @@ const followUnfollowUser = async (req, res, next) => {
         { $push: { followers: req.user.id } },
         { new: true }
       );
+      //then now we add the followid to current following list
       await userModel.findByIdAndUpdate(
         req.user.id,
         { $push: { following: userToFollowId } },
