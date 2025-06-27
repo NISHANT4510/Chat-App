@@ -12,7 +12,37 @@ const path = require("path");
 //PROTECTED
 const createPost = async (req, res, next) => {
   try {
-    res.json("Create Post");
+    const {body} = req.body;
+    if(!body){
+      return next(new HttpError ("Fill in text field and choose image", 422))
+    }
+    if(!req.files.image){
+      return next(new HttpError("Please choose an image", 422))
+    } else{
+      const {image} = req.files;
+      //image should be less than 1mb
+      if(image.size > 1000000){
+        return next(new HttpError("Profile picture too big.Should be less than 500kb"),422)
+      }
+      //rename image
+     let fileName = image.name;
+     fileName = fileName.split(".");
+     fileName = fileName[0] + uuid() + "." + fileName[fileName.length - 1]
+     await image.mv(path.join(__dirname, '..', 'uploads', fileName), async (err)=>{
+      if(err){
+        return next(new HttpError(err))
+      }
+      //store image on cloudinary
+      const result = await cloudinary.uploader.upload(path.join(__dirname, '..', 'uploads',fileName),{resource_type: "image"})
+      if(!result.secure_url){
+        return next(new HttpError("Could not upload image to cloudinary", 422))
+      }
+      //save post to DB
+      const newPost = await postModel.create({creator: req.user.id, body, image: result.secure_url})
+      await userModel.findByIdAndUpdate(newPost?.creator,{$push: {posts: newPost?._id}})
+      res.json(newPost)
+     })
+    }
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -23,7 +53,10 @@ const createPost = async (req, res, next) => {
 //PROTECTED
 const getPost = async (req, res, next) => {
   try {
-    res.json("Get Post");
+    const {id} = req.params;
+    const post = await postModel.findById(id)
+    // const post = await postModel.findById(id).populate("creator").populate({path:"comments", options : {sort: {createdAt: -1}}})
+    res.json(post)
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -34,7 +67,8 @@ const getPost = async (req, res, next) => {
 //PROTECTED
 const getPosts = async (req, res, next) => {
   try {
-    res.json("Get all Posts");
+    const posts = await postModel.find().sort({createdAt: -1})
+    res.json(posts)
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -45,7 +79,16 @@ const getPosts = async (req, res, next) => {
 //PROTECTED
 const updatePost = async (req, res, next) => {
   try {
-    res.json("Update Post");
+    const postId = req.params.id;
+    const {body} = req.body;
+    //get post from db
+    const post = await postModel.findById(postId);
+    //check if creator of the post is the logged in user 
+    if(post?.creator != req.user.id){
+      return next(new HttpError("You can't update this post since you are not the creator", 403))
+    }
+    const updatedPost = await postModel.findByIdAndUpdate(postId, {body}, {new: true})
+    res.json(updatedPost).status(200)
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -56,7 +99,16 @@ const updatePost = async (req, res, next) => {
 //PROTECTED
 const deletePost = async (req, res, next) => {
   try {
-    res.json("Delete Post");
+       const postId = req.params.id;
+    //get post from db
+    const post = await postModel.findById(postId);
+    //check if creator of the post is the logged in user 
+    if(post?.creator != req.user.id){
+      return next(new HttpError("You can't update this post since you are not the creator", 403))
+    }
+    const deletedPost = await postModel.findByIdAndDelete(postId);
+    await userModel.findByIdAndUpdate(post?.creator,{$pull:{posts:post?._id}})
+    res.json(deletedPost)
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -67,7 +119,9 @@ const deletePost = async (req, res, next) => {
 //PROTECTED
 const getFollowingPosts = async (req, res, next) => {
   try {
-    res.json("Get Following Post");
+    const user = await userModel.findById(req.user.id);
+    const posts = await postModel.find({creator: {$in: user?.following}})
+    res.json(posts)
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -78,7 +132,16 @@ const getFollowingPosts = async (req, res, next) => {
 //PROTECTED
 const likeDislikePost = async (req, res, next) => {
   try {
-    res.json("Like/Dislike a Post");
+    const {id} = req.params;
+    const post = await postModel.findById(id);
+    //Check if the logged in user has already liked post
+    let updatedPost;
+    if(post?.likes.includes(req.user.id)){
+      updatedPost = await postModel.findByIdAndUpdate(id, {$pull: {likes:req.user.id }}, {new: true})
+    }else{
+     updatedPost = await postModel.findByIdAndUpdate(id, {$push: {likes: req.user.id}},{new: true})
+    }
+    res.json(updatedPost)
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -89,7 +152,9 @@ const likeDislikePost = async (req, res, next) => {
 //PROTECTED
 const getUserPosts = async (req, res, next) => {
   try {
-    res.json("Get User Posts");
+    const userId = req.params.id;
+    const posts = await userModel.findById(userId).populate({path: "posts", options: {sort: {creeatedAt:-1}}})
+    res.json(posts)
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -100,7 +165,17 @@ const getUserPosts = async (req, res, next) => {
 //PROTECTED
 const createBookmark = async (req, res, next) => {
   try {
-    res.json("Create Bookmark");
+    const {id} = req.params;
+    //get user and check if post if already in his bookmarks.If so then remove post, otherwise add post to bookmarks
+    const user = await userModel.findById(req.user.id);
+    const postIsBookmarked = user?.bookmarks?.includes(id)
+    if(postIsBookmarked){
+      const userBookmarks = await userModel.findByIdAndUpdate(req.user.id, {$pull: {bookmarks: id}},{new:true})
+      res.json(userBookmarks)
+    }else{
+      const userBookmarks = await userModel.findByIdAndUpdate(req.user.id, {$push: {bookmarks: id}},{new:true})
+      res.json(userBookmarks)
+    }
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -111,7 +186,8 @@ const createBookmark = async (req, res, next) => {
 //PROTECTED
 const getUserBookmarks = async (req, res, next) => {
   try {
-    res.json("Get Bookmarks");
+    const userBookmarks = await userModel.findById(req.user.id).populate({path: "bookmarks", options:{sort: {createdAt: -1}}})
+    res.json(userBookmarks);
   } catch (error) {
     return next(new HttpError(error));
   }

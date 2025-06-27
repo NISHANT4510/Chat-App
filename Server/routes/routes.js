@@ -38,13 +38,13 @@ router.get("/users/:id/posts", authMiddleware, getUserPosts);
 
 
 //POST ROUTES
-router.post('/post', createPost)
-router.get('/posts/following', getFollowingPosts)
-router.get('/post/:id', getPost)
-router.get('/posts', getPosts)
-router.patch('/posts/:id', updatePost)
-router.delete('/posts/:id', deletePost)
-router.get('/posts/:id/like', likeDislikePost)
-router.get('/posts/:id/bookmark', createBookmark)
+router.post('/post',authMiddleware, createPost)
+router.get('/posts/following',authMiddleware, getFollowingPosts)
+router.get('/post/:id',authMiddleware, getPost)
+router.get('/posts',authMiddleware, getPosts)
+router.patch('/posts/:id',authMiddleware, updatePost)
+router.delete('/posts/:id',authMiddleware, deletePost)
+router.get('/posts/:id/like',authMiddleware, likeDislikePost)
+router.get('/posts/:id/bookmark',authMiddleware, createBookmark)
 
 module.exports = router;

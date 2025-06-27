@@ -8,7 +8,7 @@ const userSchema = new Schema({
     bio: {type:String, default: ''},
     followers: [{type: Schema.Types.ObjectId, ref: 'User'}],
     following: [{type: Schema.Types.ObjectId, ref: 'User'}],
-    bookmarks: [{type: Schema.Types.ObjectId, ref: 'User'}],
+    bookmarks: [{type: Schema.Types.ObjectId, ref: 'Post'}],
     posts: [{type: Schema.Types.ObjectId, ref: 'User'}]
 },{timestamps:true})
 
