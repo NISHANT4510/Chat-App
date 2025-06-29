@@ -199,7 +199,7 @@ const getUserPosts = async (req, res, next) => {
     const userId = req.params.id;
     const posts = await userModel
       .findById(userId)
-      .populate({ path: "posts", options: { sort: { creeatedAt: -1 } } });
+      .populate({ path: "posts", options: { sort: { createdAt: -1 } } });
     res.json(posts);
   } catch (error) {
     return next(new HttpError(error));
