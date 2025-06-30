@@ -71,8 +71,8 @@ const createPost = async (req, res, next) => {
 const getPost = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const post = await postModel.findById(id);
-    // const post = await postModel.findById(id).populate("creator").populate({path:"comments", options : {sort: {createdAt: -1}}})
+    // const post = await postModel.findById(id);
+    const post = await postModel.findById(id).populate("creator").populate({path:"comments", options : {sort: {createdAt: -1}}})
     res.json(post);
   } catch (error) {
     return next(new HttpError(error));
