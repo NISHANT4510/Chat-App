@@ -1,11 +1,11 @@
 import React from 'react'
 
-const Profile = () => {
+const Widgets = () => {
   return (
     <div>
-      profile
+      widgets
     </div>
   )
 }
 
-export default Profile
+export default Widgets

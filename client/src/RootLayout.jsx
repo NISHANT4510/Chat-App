@@ -1,11 +1,23 @@
-import React from 'react'
+import React from "react";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
+import Widgets from "./components/Widgets";
+import { Outlet } from "react-router-dom";
 
 const RootLayout = () => {
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <>
+      <Navbar />
+      <main className="main">
+        <div className="container main__container">
+          <Sidebar />
+          <Outlet />
 
-export default RootLayout
+          <Widgets />
+        </div>
+      </main>
+    </>
+  );
+};
+
+export default RootLayout;
