@@ -22,7 +22,7 @@ const Register = () => {
     }));
   };
 
-  //function to login user
+  //function to register user
 
   const registerUser = async (e) => {
     e.preventDefault();

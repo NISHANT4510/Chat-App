@@ -45,6 +45,12 @@ const registerUser = async (req, res, next) => {
       password: hashedPassword,
     });
     res.json(newUser).status(201);
+//     res.status(201).json({
+//   id: newUser._id,
+//   profilePhoto: newUser.profilePhoto,
+//   fullName: newUser.fullName,
+//   email: newUser.email
+// });
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -75,7 +81,7 @@ const loginUser = async (req, res, next) => {
     const token = await jwt.sign({ id: user?._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.json({ token, id: user?._id }).status(200);
+    res.json({ token, id: user?._id, profilePhoto: user.profilePhoto }).status(200);
     // res.json({token, id: user?._id, ...userInfo}).status(200)
   } catch (error) {
     return next(new HttpError(error));

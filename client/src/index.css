@@ -331,7 +331,7 @@ NAVBAR
 .navbar {
   background: var(--color-gray-0);
   display: grid;
-  place-items: center;
+  /* place-items:center; */
   height: 4rem;
   position: fixed;
   top: 0;
@@ -367,7 +367,7 @@ NAVBAR
   width: 34rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content:space-around;
   gap: 1rem;
 }
 
@@ -495,15 +495,6 @@ SIDEBAR
   font-weight: 600;
   font-size: 0.7rem;
 }
-
-
-
-
-
-
-
-
-
 
 
 

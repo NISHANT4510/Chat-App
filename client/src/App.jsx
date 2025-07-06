@@ -17,6 +17,7 @@ import store from "./store/store";
 
 
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -27,7 +28,7 @@ const router = createBrowserRouter([
       { path: "messages", element: <MessageList /> },
       { path: "messages/:receiverId", element: <Messages /> },
       { path: "bookmarks", element: <Bookmarks /> },
-      { path: "users/:id", element: <Profile /> },
+      { path: "users/:id", element: <Home /> },
       { path: "posts/:id", element: <SinglePost /> },
     ]
   },
