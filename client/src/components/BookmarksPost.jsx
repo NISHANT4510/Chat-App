@@ -10,10 +10,17 @@ const token = useSelector(state => state?.user?.currentUser?.token)
 // const userId = useSelector(state => state?.user?.currentUser?.userId)
 const userId = useSelector(state => state?.user?.currentUser?.id)
 
+
+//GET USER FROM DB
 const getUser = async () =>{
     try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/users/${userId}`, {withCredentials: true, headers: {Authorization: `Bearer ${token}`}})
         setUser(response?.data)
+        if(response?.data?.bookmarks?.includes(post?._id)){
+            setPostBookmarked(true)
+        }else {
+            setPostBookmarked(false)
+        }
     } catch (error) {
         console.log(error)
     }

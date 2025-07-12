@@ -82,7 +82,7 @@ useEffect(()=>{
 
       <ul className="singlePost__comments">
         <form className='singlePost__comments-form' onSubmit={createComment}>
-          <textarea placeholder='Enter your comment...' onChange={e => setComment(e.target.value)}></textarea>
+          <textarea placeholder='Enter your comment...' value={comment} onChange={e => setComment(e.target.value)}/>
           <button type='submit' className='singlePost__comments-btn'><IoMdSend/></button>
         </form>
         {
