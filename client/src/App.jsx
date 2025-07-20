@@ -13,6 +13,7 @@ import Register from "./pages/Register";
 import Logout from "./pages/Logout";
 import {Provider} from "react-redux";
 import store from "./store/store";
+import UserProfile from "./components/UserProfile";
 
 
 
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
       { path: "messages", element: <MessageList /> },
       { path: "messages/:receiverId", element: <Messages /> },
       { path: "bookmarks", element: <Bookmarks /> },
-      { path: "users/:id", element: <Home /> },
+      { path: "users/:id", element: <Profile /> },
       { path: "posts/:id", element: <SinglePost /> },
     ]
   },

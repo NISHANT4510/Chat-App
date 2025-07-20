@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Feed from '../components/Feed'
 import axios from 'axios'
 import FeedSkeleton from '../components/FeedSkeleton';
-import Headerinfo from '../components/Headerinfo';
+import HeaderInfo from '../components/HeaderInfo';
 
 
 const Bookmarks = () => {
@@ -30,7 +30,7 @@ getBookmarks()
 
   return (
     <section>
-      <Headerinfo text='My Bookmarks'/>
+      <HeaderInfo text='My Bookmarks'/>
       {isLoading ? <FeedSkeleton/> : bookmarks?.length < 1 ? <p className='center'>No posts bookmarked</p> : bookmarks?. map(bookmark => <Feed key={bookmark?._id} post={bookmark}/>)}
     </section>
   )
