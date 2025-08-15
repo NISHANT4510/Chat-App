@@ -6,6 +6,10 @@ import {SlPicture} from 'react-icons/sl'
 
 const CreatePost = ({onCreatePost, error}) => {
 
+// const [data, setData] = useState({
+//   body : "",
+//   image : ""
+// })
 const [body, setBody] = useState("")
 const [image, setImage] = useState("")
 const profilePhoto = useSelector(state =>state?.user?.currentUser?.profilePhoto)
