@@ -69,16 +69,19 @@
 
 
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { uiSliceActions } from '../store/ui-slice';
-import { userActions } from '../store/user-slice'; // Import Redux user slice
+import { userActions } from '../store/user-slice';
+import { useNavigate } from 'react-router-dom';
 
 const EditProfileModal = () => {
   const [userData, setUserData] = useState({ fullName: '', bio: '' });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const token = useSelector((state) => state?.user?.currentUser?.token);
   const id = useSelector((state) => state?.user?.currentUser?.id);
+  const user = useSelector((state) => state?.user?.currentUser);
 
   // GET USER FROM DB (for initial form fill)
   const getUser = async () => {
@@ -109,6 +112,11 @@ const EditProfileModal = () => {
   const updateUser = async (e) => {
     e.preventDefault();
     try {
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}/users/edit`,
         userData,
@@ -118,12 +126,26 @@ const EditProfileModal = () => {
         }
       );
 
-      // Update Redux so Navbar & CreatePost auto-update
-      dispatch(userActions.changeCurrentUser(response?.data));
+      if (response?.data) {
+        // Update Redux with fresh data from server
+        dispatch(userActions.changeCurrentUser({ 
+          ...user, 
+          ...response.data,
+          token // Preserve the token
+        }));
 
-      // Close modal
-      dispatch(uiSliceActions.closeEditProfileModal());
+        // Close modal
+        dispatch(uiSliceActions.closeEditProfileModal());
+        
+        // Update localStorage to persist the changes
+        const updatedUser = { ...user, ...response.data, token };
+        localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      }
     } catch (error) {
+      if (error?.response?.status === 403) {
+        // Only redirect if it's actually an auth error
+        navigate('/login');
+      }
       console.log(error);
     }
   };
@@ -133,6 +155,8 @@ const EditProfileModal = () => {
       return { ...prevState, [e.target.name]: e.target.value };
     });
   };
+
+
 
   return (
     <section className="editProfile" onClick={(e) => closeModal(e)}>

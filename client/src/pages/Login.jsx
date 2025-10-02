@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch} from "react-redux";
 import { userActions } from "../store/user-slice";
+import { connectSocket } from "../utils/socket";
 
 const Login = () => {
   const [userData, setUserData] = useState({ email: "", password: "" });
@@ -28,6 +29,8 @@ const Login = () => {
         `${import.meta.env.VITE_API_URL}/users/login`,
         userData
       );
+      // Connect to socket after successful login
+      connectSocket(response.data._id);
       // console.log(response.data)
       if (response.status == 200) {
         dispatch(userActions.changeCurrentUser(response?.data))

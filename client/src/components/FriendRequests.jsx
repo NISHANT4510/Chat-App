@@ -13,15 +13,23 @@ const FriendRequests = () => {
 //GET PEOPLE FROM DB
 const getFriends = async () => {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users`,{withCredentials: true, headers: {Authorization: `Bearer ${token}`}})
-        const people = await response?.data?.filter(person => {
-          if(!person?.followers.includes(userId) && person?._id !== userId) {
-            return person;
-          }
-        })
-        setFriends(people);        
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users`, {
+          withCredentials: true, 
+          headers: {Authorization: `Bearer ${token}`}
+        });
+        
+        const userData = response.data?.users || response.data || [];
+        if (Array.isArray(userData)) {
+          const people = userData.filter(person => 
+            person && person._id !== userId && !person.followers?.includes(userId)
+          );
+          setFriends(people);
+        } else {
+          setFriends([]);
+        }
     } catch (error) {
-        console.log(error)
+        console.error('Error fetching friends:', error);
+        setFriends([]);
     }
 }    
 

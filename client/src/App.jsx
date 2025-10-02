@@ -14,6 +14,7 @@ import Logout from "./pages/Logout";
 import {Provider} from "react-redux";
 import store from "./store/store";
 import UserProfile from "./components/UserProfile";
+import MessagesLayout from "./components/MessagesLayout";
 
 
 
@@ -26,8 +27,14 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
-      { path: "messages", element: <MessageList /> },
-      { path: "messages/:receiverId", element: <Messages /> },
+      { 
+        path: "messages",
+        element: <MessagesLayout />,
+        children: [
+          { index: true, element: <div className="flex items-center justify-center h-full text-gray-500">Select a conversation to start messaging</div> },
+          { path: ":receiverId", element: <Messages /> }
+        ]
+      },
       { path: "bookmarks", element: <Bookmarks /> },
       { path: "users/:id", element: <Profile /> },
       { path: "posts/:id", element: <SinglePost /> },

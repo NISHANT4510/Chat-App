@@ -60,7 +60,12 @@ const deletePost = () =>{
       <ProfileImage image={creator?.ProfilePhoto}/>
       <div className="feed__header-details">
         <h4>{creator?.fullName}</h4>
-        <small><TimeAgo date={post?.createdAt}/></small>
+        <small>
+          <TimeAgo 
+            date={post?.createdAt ? new Date(post.createdAt) : new Date()} 
+            title={post?.createdAt ? new Date(post.createdAt).toLocaleString() : ''} 
+          />
+        </small>
       </div>
       </Link>
       {showFeedHeaderMenu && userId == post?.creator && location.pathname.includes("users") && <menu className='feed__header-menu'>
@@ -69,7 +74,7 @@ const deletePost = () =>{
         </menu>}
       {userId == post?.creator && location.pathname.includes("users") && <button onClick={() => setShowFeedHeaderMenu(!showFeedHeaderMenu)}> <HiDotsHorizontal /> </button>}  
     </header>
-    <Link to={`posts/${post?._id}`} className='feed__body'>
+    <Link to={`/posts/${post?._id}`} className='feed__body'>
     <p><TrimText item={post?.body} maxLength={160}/></p>
     <div className='feed__images'>
          <img src={post?.image} alt=""/>

@@ -68,7 +68,7 @@ const followUnfollowUser = async () =>{
 
 useEffect(()=>{
   getUser()
-}, [userId,followsUser,avatar])
+}, [userId, followsUser, avatar, currentUser?.bio, currentUser?.fullName])
 
 
   return (

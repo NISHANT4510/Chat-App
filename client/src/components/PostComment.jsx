@@ -21,7 +21,7 @@ const PostComment = ({comment, onDeleteComment}) => {
             <div className="singlePost__comment-body">
                 <div>
                     <h5>{comment?.creator?.creatorName}</h5>
-                    <small><TimeAgo date={comment?.createdAt}/></small>
+                    <small><TimeAgo date={comment?.createdAt ? new Date(comment.createdAt) : new Date()} title={comment?.createdAt ? new Date(comment.createdAt).toLocaleString() : ''}/></small>
                 </div>
                 <p>{comment?.comment}</p>
             </div>

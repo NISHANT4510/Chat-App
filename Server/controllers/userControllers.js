@@ -104,13 +104,15 @@ const getUser = async (req, res, next) => {
   }
 };
 
-//=======================GET USER
+//=======================GET USERS
 //GET : api/users
 //PROTECTED
 const getUsers = async (req, res, next) => {
   try {
-    const users = await userModel.find().limit(10).sort({ createdAt: -1 });
-    res.json(users);
+    const users = await UserModel.find()
+      .select('-password')  // Exclude password from the response
+      .sort({ fullName: 1 }); // Sort by name
+    res.json({ users });
   } catch (error) {
     return next(new HttpError(error));
   }
@@ -211,6 +213,8 @@ const followUnfollowUser = async (req, res, next) => {
     return next(new HttpError(error));
   }
 };
+
+
 
 module.exports = {
   registerUser,

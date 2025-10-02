@@ -46,6 +46,13 @@ router.get("/users/:id/follow-unfollow", authMiddleware, followUnfollowUser);
 router.post("/users/avatar", authMiddleware, changeUserAvatar);
 router.get("/users/:id/posts", authMiddleware, getUserPosts);
 
+//MESSAGE ROUTES
+router.post("/messages/:receiverId", authMiddleware, createMessage);
+router.get("/messages/:receiverId", authMiddleware, getMessages);
+router.get("/conversations", authMiddleware, getConversations);
+router.get("/messages/:receiverId", authMiddleware, getMessages);
+router.get("/conversations", authMiddleware, getConversations);
+
 //POST ROUTES
 router.post("/post", authMiddleware, createPost);
 router.get("/posts/following", authMiddleware, getFollowingPosts);
