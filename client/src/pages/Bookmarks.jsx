@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import Feed from '../components/Feed'
-import axios from 'axios'
+import Feed from '../components/Feed';
+import axios from 'axios';
 import FeedSkeleton from '../components/FeedSkeleton';
-import HeaderInfo from '../components/HeaderInfo';
+import HeaderInfo from '../components/Headerinfo';
 
 
 const Bookmarks = () => {
