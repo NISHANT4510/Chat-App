@@ -3,7 +3,7 @@ import FriendRequests from './FriendRequests'
 
 const Widgets = () => {
   return (
-    <section className="widgets">
+    <section className="w-full px-4 py-4 lg:px-0 lg:py-0">
       <FriendRequests/>
     </section>
   )

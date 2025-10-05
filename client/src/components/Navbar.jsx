@@ -37,21 +37,7 @@ const Navbar = () => {
     }
   }, [userId, token]);
 
-  // REDIRECT USER TO LOGIN PAGE WHEN USER DOESN'T HAVE A TOKEN
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-  }, [token]);
-
-  // LOG USER OUT AFTER AN HOUR
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/logout");
-    }, 1000 * 60 * 60);
-
-    return () => clearTimeout(timer);
-  }, []);
+  // Authentication checks removed to view UI
 
   return (
     <nav className="navbar">

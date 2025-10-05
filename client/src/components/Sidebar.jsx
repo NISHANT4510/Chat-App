@@ -2,97 +2,86 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { AiOutlineHome } from "react-icons/ai";
 import { GoMail } from "react-icons/go";
-import {FaRegBookmark } from "react-icons/fa";
-import {PiPaintBrushBold } from "react-icons/pi";
-import {useDispatch } from "react-redux";
-import {uiSliceActions } from "../store/ui-slice";
-
+import { FaRegBookmark } from "react-icons/fa";
+import { PiPaintBrushBold } from "react-icons/pi";
+import { useDispatch } from "react-redux";
+import { uiSliceActions } from "../store/ui-slice";
 
 const Sidebar = () => {
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-const openThemeModal = () =>{
-  dispatch(uiSliceActions.openThemeModal())
-}
+  const openThemeModal = () => {
+    dispatch(uiSliceActions.openThemeModal());
+  };
 
+  const menuItems = [
+    { to: "/", icon: AiOutlineHome, label: "Home" },
+    { to: "/messages", icon: GoMail, label: "Messages" },
+    { to: "/bookmarks", icon: FaRegBookmark, label: "Bookmarks" },
+  ];
 
   return (
-    // <menu className="sidebar">
-    //   <NavLink
-    //     to="/"
-    //     className={`sidebar__items ${({ isActive }) =>
-    //       isActive ? "active" : ""}`}
-    //   >
-    //     <i className="sidebar__icon"><AiOutlineHome/></i>
-    //     <p>Home</p>
-    //   </NavLink>
+    <>
+      {/* Desktop Sidebar */}
+      <aside className="hidden lg:flex flex-col bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-3 sticky top-20 h-fit">
+        <nav className="flex flex-col gap-1 mb-4">
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 group ${
+                  isActive
+                    ? "bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                }`
+              }
+            >
+              <item.icon className="text-xl flex-shrink-0" />
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
 
-    //   <NavLink
-    //     to="/messages"
-    //     className={`sidebar__items ${({ isActive }) =>
-    //       isActive ? "active" : ""}`}
-    //   >
-    //     <i className="sidebar__icon"><GoMail/></i>
-    //     <p>Message</p>
-    //   </NavLink>
-    //   <NavLink
-    //     to="/bookmarks"
-    //     className={`sidebar__items ${({ isActive }) =>
-    //       isActive ? "active" : ""}`}
-    //   >
-    //     <i className="sidebar__icon"><FaRegBookmark/></i>
-    //     <p>Bookmarks</p>
-    //   </NavLink>
+          <button
+            onClick={openThemeModal}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+          >
+            <PiPaintBrushBold className="text-xl flex-shrink-0" />
+            <span>Themes</span>
+          </button>
+        </nav>
+      </aside>
 
-    //   <a
-    //     className={`sidebar__items ${({ isActive }) =>
-    //       isActive ? "active" : ""}`} onClick={openThemeModal}
-    //   >
-    //     <i className="sidebar__icon"><PiPaintBrushBold/></i>
-    //     <p>Themes</p>
-    //   </a>
-    // </menu>
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 z-50">
+        <div className="flex items-center justify-around px-2 py-2">
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `flex flex-col items-center gap-1 px-3 py-2 rounded-lg font-medium text-xs transition-all duration-200 ${
+                  isActive
+                    ? "text-blue-600 dark:text-blue-400"
+                    : "text-gray-700 dark:text-gray-300"
+                }`
+              }
+            >
+              <item.icon className="text-2xl" />
+              <span className="text-xs">{item.label}</span>
+            </NavLink>
+          ))}
 
-      <menu className="sidebar">
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          `sidebar__item ${isActive ? "active" : ""}`
-        }
-      >
-        <span className="sidebar__icon"><AiOutlineHome /></span>
-        <span className="sidebar__text">Home</span>
-      </NavLink>
-
-      <NavLink
-        to="/messages"
-        className={({ isActive }) =>
-          `sidebar__item ${isActive ? "active" : ""}`
-        }
-      >
-        <span className="sidebar__icon"><GoMail /></span>
-        <span className="sidebar__text">Message</span>
-      </NavLink>
-
-      <NavLink
-        to="/bookmarks"
-        className={({ isActive }) =>
-          `sidebar__item ${isActive ? "active" : ""}`
-        }
-      >
-        <span className="sidebar__icon"><FaRegBookmark /></span>
-        <span className="sidebar__text">Bookmarks</span>
-      </NavLink>
-
-      <button
-        type="button"
-        onClick={openThemeModal}
-        className="sidebar__item"
-      >
-        <span className="sidebar__icon"><PiPaintBrushBold /></span>
-        <span className="sidebar__text">Themes</span>
-      </button>
-    </menu>
+          <button
+            onClick={openThemeModal}
+            className="flex flex-col items-center gap-1 px-3 py-2 rounded-lg font-medium text-xs transition-all duration-200 text-gray-700 dark:text-gray-300"
+          >
+            <PiPaintBrushBold className="text-2xl" />
+            <span className="text-xs">Themes</span>
+          </button>
+        </div>
+      </nav>
+    </>
   );
 };
 

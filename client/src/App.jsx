@@ -15,6 +15,7 @@ import {Provider} from "react-redux";
 import store from "./store/store";
 import UserProfile from "./components/UserProfile";
 import MessagesLayout from "./components/MessagesLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 
 
@@ -23,7 +24,7 @@ import MessagesLayout from "./components/MessagesLayout";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout />,
+    element: <ProtectedRoute><RootLayout /></ProtectedRoute>,
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },

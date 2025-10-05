@@ -1829,14 +1829,55 @@ MEDIA QUERIES (small screens)
 
 
 
+/*==========================================================
+RESPONSIVE DESIGN - Mobile First
+==========================================================*/
+
+/* Mobile devices (up to 600px) */
 @media screen and (max-width: 600px) {
+  html {
+    font-size: 11px;
+  }
+
+  .container {
+    width: var(--container-w-sm);
+  }
+
+  /* Hide widgets on mobile */
+  .widgets {
+    display: none;
+  }
+
+  /* Single column layout */
+  .main__container {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    padding-bottom: 6rem; /* Space for bottom nav */
+  }
+
+  /* Hide search on mobile navbar */
+  .navbar__search {
+    display: none;
+  }
+
+  .navbar__container {
+    padding: 0 1rem;
+  }
+
+  .navbar__logo {
+    font-size: 1.2rem;
+  }
+
+  /* Mobile bottom navigation */
   .sidebar {
     position: fixed;
-    top: auto;      /* explicitly unset top */
-    bottom: 1rem;   /* stick to bottom */
+    top: auto;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    height: 3.5rem; 
+    height: 3.5rem;
+    width: 90%;
+    max-width: 25rem;
     padding: 0.25rem 0.5rem;
     background: var(--color-gray-0);
     display: flex;
@@ -1849,7 +1890,8 @@ MEDIA QUERIES (small screens)
     z-index: 1000;
   }
 
-  .sidebar a {
+  .sidebar a,
+  .sidebar__items {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1857,19 +1899,30 @@ MEDIA QUERIES (small screens)
     text-decoration: none;
     color: var(--color-gray-700);
     font-size: 0.65rem;
-    padding: 0.2rem 0.3rem;
+    padding: 0.4rem 0.6rem;
     transition: var(--transition);
+    transform: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
 
-  .sidebar a.active {
-    color: #fff;
+  .sidebar a::before,
+  .sidebar__items::before {
+    display: none;
   }
 
-  .sidebar a.active svg,
-  .sidebar a.active i {
+  .sidebar a.active,
+  .sidebar__items.active {
+    color: var(--color-primary);
+    background: transparent !important;
+  }
+
+  .sidebar a.active .sidebar__icon,
+  .sidebar__items.active .sidebar__icon {
     background: var(--color-primary);
     border-radius: 50%;
-    padding: 0.3rem;
+    padding: 0.4rem;
+    color: white;
   }
 
   .sidebar p {
@@ -1878,31 +1931,175 @@ MEDIA QUERIES (small screens)
     display: block;
   }
 
-  /* Hover effects */
-  .sidebar a:hover {
+  .sidebar__icon {
+    font-size: 1.3rem;
+  }
+
+  .sidebar a:hover,
+  .sidebar__items:hover {
+    transform: none;
+    background: transparent !important;
     color: var(--color-primary);
   }
 
-  /* Dark mode */
   .dark .sidebar {
     background: var(--color-gray-900);
+    border: 1px solid var(--color-gray-700);
   }
 
-  .dark .sidebar a {
-    color: #fff;
+  .dark .sidebar a,
+  .dark .sidebar__items {
+    color: var(--color-gray-600);
   }
 
-  .dark .sidebar a.active svg,
-  .dark .sidebar a.active i {
-    background: var(--color-primary);
+  .dark .sidebar a.active,
+  .dark .sidebar__items.active {
+    color: var(--color-primary);
   }
 
-  /* Icon size */
-  .sidebar a svg,
-  .sidebar a i {
-    width: 1.5rem;
-    height: 1.5rem;
+  /* Register/Login forms */
+  .register__container {
+    width: 90%;
+    padding: 2rem 1.5rem;
+  }
+
+  /* Theme modal */
+  .theme__container {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  /* Edit profile modal */
+  .editProfile__container {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  /* Edit post modal */
+  .editPost__container {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  /* Feed images */
+  .feed__images {
+    max-height: 25rem;
+  }
+
+  /* Messages */
+  .messagesBox__message {
+    width: 85%;
+  }
+
+  /* Profile header */
+  .profile__header {
+    flex-direction: column;
+    text-align: center;
   }
 }
+
+/* Tablet devices (601px to 1024px) */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  html {
+    font-size: 11px;
+  }
+
+  .container {
+    width: 92%;
+  }
+
+  /* Two column layout - hide widgets */
+  .main__container {
+    grid-template-columns: 15rem 1fr;
+    gap: 1rem;
+  }
+
+  .widgets {
+    display: none;
+  }
+
+  /* Navbar adjustments */
+  .navbar__search {
+    width: 20rem;
+  }
+
+  .navbar__container {
+    padding: 0 1.5rem;
+  }
+
+  /* Sidebar stays on left */
+  .sidebar {
+    padding: 1rem;
+    gap: 0.8rem;
+  }
+
+  .sidebar__icon {
+    font-size: 1.3rem;
+  }
+
+  /* Register/Login forms */
+  .register__container {
+    width: 28rem;
+  }
+
+  /* Modals */
+  .theme__container {
+    width: 30rem;
+  }
+
+  .editProfile__container {
+    width: 32rem;
+  }
+
+  .editPost__container {
+    width: 35rem;
+  }
+
+  /* Feed images */
+  .feed__images {
+    max-height: 35rem;
+  }
+}
+
+/* Desktop (1025px and above) - default styles apply */
+@media screen and (min-width: 1025px) {
+  .sidebar {
+    display: flex;
+  }
+
+  .widgets {
+    display: block;
+  }
+}
+
+/* Extra small devices (portrait phones, less than 400px) */
+@media screen and (max-width: 400px) {
+  html {
+    font-size: 10px;
+  }
+
+  .navbar__logo {
+    font-size: 1rem;
+  }
+
+  .register__container {
+    width: 95%;
+    padding: 1.5rem 1rem;
+  }
+
+  .sidebar {
+    width: 95%;
+    height: 3.2rem;
+  }
+
+  .sidebar p {
+    font-size: 0.5rem;
+  }
+
+  .sidebar__icon {
+    font-size: 1.2rem;
+  }
+}
+
 
 

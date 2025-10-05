@@ -3,11 +3,13 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Widgets from "./components/Widgets";
 import ThemeModal from "./components/ThemeModal";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 
 const RootLayout = () => {
+  const location = useLocation();
+  const isMessagesRoute = location.pathname.startsWith('/messages');
 
   const {themeModalIsOpen} =useSelector(state => state?.ui)
   const {primaryColor, backgroundColor} = useSelector((state => state?.ui?.theme))
@@ -25,7 +27,7 @@ const RootLayout = () => {
           <Sidebar />
           <Outlet />
 
-          <Widgets />
+          {!isMessagesRoute && <Widgets />}
           {themeModalIsOpen && <ThemeModal/>}
         </div>
       </main>
