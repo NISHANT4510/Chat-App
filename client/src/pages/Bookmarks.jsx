@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Feed from '../components/Feed';
 import axios from 'axios';
 import FeedSkeleton from '../components/FeedSkeleton';
-import HeaderInfo from '../components/Headerinfo';
+import HeaderInfo from '../components/HeaderInfo';
 
 
 const Bookmarks = () => {
