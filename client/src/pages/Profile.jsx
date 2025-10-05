@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from 'react'
 import UserProfile from '../components/UserProfile'
-import HeaderInfo from '../components/HeaderInfo'
+import HeaderInfo from '../components/Headerinfo'
 import Feed from '../components/Feed'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
