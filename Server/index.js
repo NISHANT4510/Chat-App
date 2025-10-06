@@ -11,7 +11,7 @@ const { server, app } = require('./socket/socket')
 
 app.use(express.urlencoded({extended:true}))
 app.use(express.json({extended:true}))
-app.use(cors({credentials:true,origin:["http://localhost:5173"]}))
+app.use(cors({credentials:true,origin:["http://localhost:3001/","http://localhost:5173/","https://chatapp-frontend4510.netlify.app/"]}))
 app.use(upload())
 
 
